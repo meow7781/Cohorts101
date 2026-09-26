@@ -15,8 +15,12 @@
     <script>
         async function addTodos(){
             // const input = document.getElementById("useNotes");
-            const respons =  axios.post("http://localhost:3001/notes", {
+            const response = await axios.post("http://localhost:3001/notes", {
                 note: document.getElementById("useNotes").value
+            }, {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
             })
 
             const newNode = document.createElement("div"); // new frontemd new notes
@@ -29,14 +33,18 @@
         }
 
         async function getTodos(){
-          const response = await axios.get("http://localhost:3001/notes");
+          const response = await axios.get("http://localhost:3001/notes", {
+             headers: {
+                 token: localStorage.getItem("token")
+             }
+          });
           const notes = response.data.notes;
 
           document.getElementById("notes").innerHTML = "";
 
           for(let i = 0; i < notes.length; i++){
             const noteNote = document.createElement("div");
-            noteNote.innerHTML = notes[i];
+            noteNote.innerHTML = notes[i].notes;
             noteNote.setAttribute("style", "border: 2px solid black; padding: 10px;");
             document.getElementById("notes").appendChild(noteNote);
           }
